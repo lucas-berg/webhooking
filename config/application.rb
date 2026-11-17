@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 
 module WebHooking
   class Application < Rails::Application
-    config.load_defaults 7.0
+    config.load_defaults 8.1
 
     config.active_record.default_timezone = :local
     config.i18n.available_locales = %i[en]

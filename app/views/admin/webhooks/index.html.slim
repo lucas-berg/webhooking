@@ -31,4 +31,4 @@
                   = show_link admin_webhook_path(webhook)
                   = destroy_link admin_webhook_path(webhook), remote: true
 
-        == pagy_nav @pagy
+        == @pagy.series_nav(:bootstrap)

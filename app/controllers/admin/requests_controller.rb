@@ -7,7 +7,7 @@ module Admin
     def index
       @q = Request.all.ransack(params[:q])
       @requests = @q.result.order('requests.id desc') # .page(params[:page] || 1).per(params[:per] || 10)
-      @pagy, @requests = pagy(@requests, items: params[:per_page] || 20, page: params[:page])
+      @pagy, @requests = pagy(:offset, @requests, limit: params.fetch(:per_page, 20).to_i.clamp(1, 100))
     end
 
     def show; end

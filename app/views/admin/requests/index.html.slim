@@ -29,4 +29,4 @@
                   = show_link admin_request_path(request)
                   = destroy_link admin_request_path(request), remote: true
 
-        == pagy_nav @pagy
+        == @pagy.series_nav(:bootstrap)

@@ -7,7 +7,7 @@ module Admin
     def index
       @q = Webhook.all.ransack(params[:q])
       @webhooks = @q.result.order('webhooks.id desc')
-      @pagy, @webhooks = pagy(@webhooks, items: params[:per_page] || 20, page: params[:page])
+      @pagy, @webhooks = pagy(:offset, @webhooks, limit: params.fetch(:per_page, 20).to_i.clamp(1, 100))
     end
 
     def show; end

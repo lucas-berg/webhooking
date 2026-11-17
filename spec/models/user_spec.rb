@@ -29,7 +29,7 @@ RSpec.describe User, type: :model do
   describe 'create user' do
     it 'ok' do
       user = create(:user)
-      expect(user.id).to eq 1
+      expect(user).to be_persisted
     end
   end
 end

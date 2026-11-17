@@ -1,101 +1,53 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+ruby '3.4.10'
 
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-
-gem 'rails', '7.1.3.4'
-
-# db and server
-gem 'pg', '~> 1.5.6'
-gem 'pghero', '~> 3.4.1'
-gem 'puma', '6.4.2'
-gem 'redis', '~> 5.2'
-gem 'redis-namespace'
-
-# front tools
-gem 'chartkick'
-gem 'react-rails'
-gem 'sassc-rails'
+gem 'rails', '~> 8.1.4', '>= 8.1.4.1'
+gem 'pg', '~> 1.7'
+gem 'puma', '~> 8.1'
+gem 'redis', '~> 5.0'
+gem 'pghero'
 gem 'simple_form'
 gem 'slim'
 gem 'sprockets-rails'
-gem 'stimulus-rails'
-gem 'tailwindcss-rails', '~> 2.6.0'
-gem 'turbo-rails', '~> 1.0.1'
-gem 'vite_rails', '~> 3.0.15'
-
-# backend jobs
+gem 'turbo-rails', '~> 2.0'
+gem 'vite_rails', '~> 3.11'
 gem 'acts_as_list'
-gem 'api_tools'
 gem 'jsonpath'
-gem 'liquid'
-gem 'mini_racer', '~> 0.12.0'
-gem 'sidekiq', '~> 7.1'
-gem 'sidekiq-cron'
-gem 'sidekiq-failures', '~> 1.0.4'
-
-# user center
-gem 'devise', '~> 4.9.4'
-gem 'omniauth-github'
-gem 'omniauth-rails_csrf_protection'
-
-# api
-gem 'oj'
-gem 'rack-attack', '~> 6.6.0'
+gem 'liquid', '~> 5.0'
+gem 'mini_racer', '~> 0.22'
+gem 'rest-client', '~> 2.1'
+gem 'sidekiq', '~> 8.1'
+gem 'sidekiq-cron', '~> 2.4'
+gem 'sidekiq-failures', '~> 1.1'
+gem 'devise', '~> 5.0'
 gem 'rack-cors', require: 'rack/cors'
-
-# tools
-gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', require: false
-gem 'dotenv-rails', '~> 3.1.2'
-gem 'enumerize', '~> 2.8.0'
-gem 'groupdate', '~> 6.0'
-gem 'image_processing', '~> 1.2'
-gem 'jbuilder'
-gem 'meta-tags', '~> 2.21.0'
-gem 'net-http'
-gem 'nokogiri', '>= 1.16.4'
-gem 'pagy', '~> 8.4.0'
+gem 'dotenv-rails'
+gem 'image_processing'
+gem 'pagy', '~> 43.8'
 gem 'ransack'
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-
-# monitor
 gem 'sentry-ruby'
 gem 'sentry-sidekiq'
-
-gem 'brakeman'
-gem 'bundler-audit'
+gem 'csv'
 
 group :development, :test do
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
-  gem 'ffaker', '~> 2.20'
+  gem 'debug'
   gem 'foreman'
-  gem 'pry-rails'
-  gem 'rspec-rails', '~> 6.1.2'
-
-  gem 'erb_lint', require: false
-  gem 'lefthook'
-  gem 'rubocop'
-  gem 'rubocop-ast'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rake'
-  gem 'rubocop-rspec'
+  gem 'rspec-rails', '~> 8.1'
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
 end
 
 group :development do
   gem 'web-console'
-  # gem "rack-mini-profiler"
-  gem 'annotate', '~> 3.2'
-  gem 'spring'
 end
 
 group :test do
   gem 'capybara'
-  gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'mocha'
+  gem 'ffaker'
   gem 'selenium-webdriver'
   gem 'webmock'
 end

@@ -1,5 +1,12 @@
-/tmp
-/.git
-/log/*
-/node_modules
-/datadir
+.git
+.env
+.env.*
+!.env.template
+.bundle
+node_modules
+log/*
+tmp/*
+storage/*
+public/vite*
+config/master.key
+datadir

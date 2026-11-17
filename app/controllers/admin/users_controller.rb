@@ -8,7 +8,7 @@ module Admin
       @q = User.all.ransack(params[:q])
       @users = @q.result.order('users.id desc')
 
-      @pagy, @users = pagy(@users, per_page: params[:per_page], page: params[:page])
+      @pagy, @users = pagy(:offset, @users, limit: params.fetch(:per_page, 20).to_i.clamp(1, 100))
     end
 
     def show; end

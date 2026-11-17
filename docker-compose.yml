@@ -1,42 +1,52 @@
-version: '3'
+x-app: &app
+  build: .
+  environment: &app-env
+    RAILS_ENV: production
+    PG_HOST: db
+    PG_PORT: 5432
+    POSTGRES_USER: webhooking
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    POSTGRES_DB: webhooking_production
+    REDIS_URL: redis://redis:6379/1
+    SECRET_KEY_BASE: ${SECRET_KEY_BASE:?Set SECRET_KEY_BASE in .env}
+    WEBSITE_URL: ${WEBSITE_URL:-http://localhost:3005}
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  volumes:
+    - uploads:/app/storage
+
 services:
-  webhooking:
-    ports: 
-      - 3000:3000
-    # image: webhooking:latest
-    build: .
-    container_name: webhooking
-    command: bash -c "bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rails s -b 0.0.0.0 -p 3000"
-    environment:
-      - ENV=production
-      - RAILS_ENV=production
-      - PG_HOST=db
-      - PG_POOL=30
-      - PG_USER=postgres
-      - POSTGRES_PASSWORD=webhooking
-      - POSTGRES_DB=webhooking_production
-      - PG_PORT=5433
-      - REDIS_URL=redis://redis:6379/10
-      - SENTRY_DSN=
-      - WEBSITE_URL=http://localhost:3005
-    depends_on:
-      - redis
-      - db
-    volumes:
-      - ./log:/webhooking/log
-      - ./public:/webhooking/public # nginx 可以处理内容
-      - ./public:/webhooking/public/ # nginx 可以处理内容
-      - ./public/assets:/webhooking/public/assets # nginx 可以处理内容
-      - ./public/packs:/webhooking/public/packs # nginx 可以处理内容
-      - ./tmp/pids:/webhooking/tmp/pids
+  web:
+    <<: *app
+    ports: ["3005:3000"]
+    command: ["sh", "-c", "bundle exec rails db:prepare && exec bundle exec rails server -b 0.0.0.0 -p 3000"]
+  worker:
+    <<: *app
+    command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
   db:
-    image: postgres:14
-    volumes:
-      - "./datadir/postgresql:/var/lib/postgresql/data"
+    image: postgres:17
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=webhooking
+      POSTGRES_USER: webhooking
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: webhooking_production
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webhooking -d webhooking_production"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
   redis:
-    image: redis:6
-    volumes:
-      - './datadir/redis:/data'
+    image: redis:7.4
+    volumes: ["redis_data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:

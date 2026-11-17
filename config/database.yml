@@ -1,21 +1,20 @@
 default: &default
   adapter: postgresql
-  host: <%= ENV["PG_HOST"] || '127.0.0.1' %>
-  port: <%= ENV["PG_PORT"] || '5432' %>
+  encoding: unicode
+  host: <%= ENV.fetch('PG_HOST', '127.0.0.1') %>
+  port: <%= ENV.fetch('PG_PORT', 5432) %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+
 development:
   <<: *default
-  pool: 5
-  database: webhooking_development
+  database: <%= ENV.fetch('POSTGRES_DB', 'webhooking_development') %>
 
 test:
   <<: *default
   database: webhooking_test
 
 production:
-  adapter: postgresql
-  host: <%= ENV["PG_HOST"]  %>
-  pool: <%= ENV["PG_POOL"] || 50 %>
-  username:  <%= ENV['POSTGRES_USER'] || 'webhooking_postgres' %>
-  password: <%= ENV['POSTGRES_PASSWORD'] || 'webhooking==' %>
-  database: <%= ENV["POSTGRES_DBPOSTGRES_DB"] || 'webhooking_production' %>
-  port: <%= ENV["PG_PORT"] || '3433' %>
+  <<: *default
+  database: <%= ENV.fetch('POSTGRES_DB', ENV.fetch('POSTGRES_DBPOSTGRES_DB', 'webhooking_production')) %>

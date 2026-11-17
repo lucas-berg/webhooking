@@ -62,4 +62,4 @@
                   = show_link admin_schedule_path(schedule)
                   = destroy_link admin_schedule_path(schedule), remote: true
 
-        == pagy_nav @pagy
+        == @pagy.series_nav(:bootstrap)

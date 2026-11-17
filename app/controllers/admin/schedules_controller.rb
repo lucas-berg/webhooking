@@ -7,7 +7,7 @@ module Admin
     def index
       @q = Schedule.all.ransack(params[:q])
       @schedules = @q.result.order('schedules.id desc')
-      @pagy, @schedules = pagy(@schedules, items: params[:per_page] || 20, page: params[:page])
+      @pagy, @schedules = pagy(:offset, @schedules, limit: params.fetch(:per_page, 20).to_i.clamp(1, 100))
     end
 
     def show; end

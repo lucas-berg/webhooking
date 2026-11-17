@@ -4,12 +4,10 @@ module Admin
   class ApplicationController < ApplicationController
     layout 'admin'
     include Admin::ResourceContent
-    include Pagy::Backend
     include ActionView::RecordIdentifier
 
     protect_from_forgery
 
-    after_action { pagy_headers_merge(@pagy) if @pagy }
     before_action :authenticate_user!
 
     before_action :auth_admin_role!
